@@ -27,12 +27,28 @@ class Taiwan_AQI(list):
             csvReader = csv.reader(file)
             next(csvReader)
             for item in csvReader:
-                site = Site(item[0], item[1], item[2])
-                self.append(site)
+                if item[2] != 999:
+                    site = Site(item[0], item[1], item[2])
+                    self.append(site)
             
         else:
             raise Exception("下載失敗")
         
-    def get_bad_3(self):
-        return self[:3]
+    def get_bad(self,n=3):
+        '''
+        @param n,最差的數量
+        取出AQI最差的list
+        list內的元素是Site的實體
+        '''
+        sorted_aqi= sorted(self,key=lambda site:site.aqi)
+        return sorted_aqi[-n:]
+    
+    def get_better(self, n=3):
+        '''
+        @param n,最好的數量
+        取出AQI最好的list
+        list內的元素是Site的實體
+        '''
+        sorted_aqi = sorted(self, key=lambda site: site.aqi)
+        return sorted_aqi[:n]
 
